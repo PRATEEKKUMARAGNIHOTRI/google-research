@@ -32,7 +32,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.preprocessing import OneHotEncoder
 import tensorflow.compat.v1 as tf
 gfile = tf.gfile
@@ -280,53 +280,27 @@ def load_fico_score_data():
 
 def load_california_housing_data(
 ):
-  """Loads the California Housing dataset.
+  df = pd.read_csv('../input/cmsnewsamples/new-smaples.csv').drop(columns = 'Unnamed: 0')
+  df = df.drop(columns = [i for i in df.columns if '_1' in i])
+  df['non_hits'] = df[[i for i in df.columns if 'mask' in i]].sum(axis=1)
+  df = df[df['non_hits']==0].reset_index(drop=True)
+  
+  features = ['emtf_phi_'+str(i) for i in [0,2,3,4]] + ['emtf_theta_'+str(i) for i in [0,2,3,4]] + ['old_emtf_phi_'+str(i) for i in [0,2,3,4]]
 
-  California  Housing  dataset is a canonical machine learning dataset derived
-  from the 1990 U.S. census to understand the influence of community
-  characteristics on housing prices. The task is regression to predict the
-  median price of houses (in million dollars) in each district in California.
-  For more info, refer to
-  https://scikit-learn.org/stable/datasets/index.html#california-housing-dataset.
+  new_features = []
+  for i in range(len(features)-1):
+      if (i+1)%4!=0:
+          new_features.append('delta_'+'_'.join(features[i].split('_')[:-1])+'_'+str((i+1)%4)+'_'+str(i%4))
+          df[new_features[-1]]=df[features[i+1]]-df[features[i]]
 
-  Returns:
-    A dict containing the `problem` type (i.e. regression) and the
-    input features `X` as a pandas.Dataframe and the regression targets `y` as
-    np.ndarray.
-  """
-  feature_names = [
-      'MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup',
-      'Latitude', 'Longitude'
-  ]
-
-  archive_path = osp.join(DATA_PATH, 'cal_housing.tgz')
-  with gfile.Open(archive_path, 'rb') as fileobj:
-    with tarfile.open(fileobj=fileobj, mode='r:gz') as f:
-      cal_housing = np.loadtxt(
-          f.extractfile('CaliforniaHousing/cal_housing.data'), delimiter=',')
-      # Columns are not in the same order compared to the previous
-      # URL resource on lib.stat.cmu.edu
-      columns_index = [8, 7, 2, 3, 4, 5, 6, 1, 0]
-      cal_housing = cal_housing[:, columns_index]
-
-  target, data = cal_housing[:, 0], cal_housing[:, 1:]
-
-  # avg rooms = total rooms / households
-  data[:, 2] /= data[:, 5]
-
-  # avg bed rooms = total bed rooms / households
-  data[:, 3] /= data[:, 5]
-
-  # avg occupancy = population / households
-  data[:, 5] = data[:, 4] / data[:, 5]
-
-  # target in units of 100,000
-  target = target / 100000.0
-
+  features = new_features[:]
+  scaler_1 = StandardScaler()
+  df[features] = scaler_1.fit_transform(df[features])
+  
   return {
       'problem': 'regression',
-      'X': pd.DataFrame(data, columns=feature_names),
-      'y': target,
+      'X': df[features],
+      'y': df['1/pT'],
   }
 
 
