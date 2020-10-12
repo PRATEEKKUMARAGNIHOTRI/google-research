@@ -299,8 +299,8 @@ def load_california_housing_data(
   
   return {
       'problem': 'regression',
-      'X': df[features].to_numpy(),
-      'y': df[['1/pT']].to_numpy(),
+      'X': pd.DataFrame(df[features].to_numpy()),
+      'y': df[['1/pT']].values,
   }
 
 
