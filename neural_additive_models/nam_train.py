@@ -26,7 +26,7 @@ from absl import app
 from absl import flags
 import numpy as np
 import tensorflow.compat.v1 as tf
-
+print(os.getcwd())
 from neural_additive_models import data_utils
 from neural_additive_models import graph_builder
 
