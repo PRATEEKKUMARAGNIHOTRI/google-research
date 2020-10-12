@@ -300,7 +300,7 @@ def load_california_housing_data(
   return {
       'problem': 'regression',
       'X': df[features],
-      'y': df['1/pT'],
+      'y': df[['1/pT']],
   }
 
 
