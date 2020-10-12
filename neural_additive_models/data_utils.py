@@ -280,7 +280,7 @@ def load_fico_score_data():
 
 def load_california_housing_data(
 ):
-  df = pd.read_csv('../input/cmsnewsamples/new-smaples.csv').drop(columns = 'Unnamed: 0')
+  df = pd.read_csv('/kaggle/input/cmsnewsamples/new-smaples.csv').drop(columns = 'Unnamed: 0')
   df = df.drop(columns = [i for i in df.columns if '_1' in i])
   df['non_hits'] = df[[i for i in df.columns if 'mask' in i]].sum(axis=1)
   df = df[df['non_hits']==0].reset_index(drop=True)
