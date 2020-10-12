@@ -127,6 +127,8 @@ def mse_loss(model, inputs,
              targets):
   """Mean squared error loss for regression."""
   predicted = model(inputs, training=True)
+  predicted = tf.squeeze(predicted)
+  targets = tf.squeeze(targets)
   return tf.losses.mean_squared_error(predicted, targets)
 
 
