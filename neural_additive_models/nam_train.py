@@ -20,6 +20,7 @@ r"""Training script for Neural Additive Models.
 
 import operator
 import os
+os.chdir('/kaggle/working/google-research/')
 from typing import Tuple, Iterator, List, Dict
 from absl import app
 from absl import flags
