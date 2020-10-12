@@ -338,6 +338,8 @@ def single_split_training(data_gen,
   curr_logdir = os.path.join(logdir, 'fold_{}',
                              'split_{}').format(FLAGS.fold_num,
                                                 FLAGS.data_split)
+  print(x_train.shape, y_train.shape, x_validation.shape, y_validation.shape)
+  print(type(x_train), type(y_train), type(x_validation), type(y_validation))
   training(x_train, y_train, x_validation, y_validation, curr_logdir)
 
 
