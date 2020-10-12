@@ -284,7 +284,7 @@ def load_california_housing_data(
   df = df.drop(columns = [i for i in df.columns if '_1' in i])
   df['non_hits'] = df[[i for i in df.columns if 'mask' in i]].sum(axis=1)
   df = df[df['non_hits']==0].reset_index(drop=True)
-  
+  df['1/pT'] = df['q/pt'].abs()
   features = ['emtf_phi_'+str(i) for i in [0,2,3,4]] + ['emtf_theta_'+str(i) for i in [0,2,3,4]] + ['old_emtf_phi_'+str(i) for i in [0,2,3,4]]
 
   new_features = []
