@@ -300,7 +300,7 @@ def load_california_housing_data(
   return {
       'problem': 'regression',
       'X': pd.DataFrame(df[features].to_numpy()),
-      'y': df[['1/pT']].values,
+      'y': df[['1/pT']].to_numpy(),
   }
 
 
