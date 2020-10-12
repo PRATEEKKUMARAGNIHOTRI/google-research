@@ -17,6 +17,7 @@
 """Tests functionality of training NAM models."""
 
 import os
+os.chdir('/kaggle/working/google-research/')
 
 from absl import flags
 from absl.testing import absltest
