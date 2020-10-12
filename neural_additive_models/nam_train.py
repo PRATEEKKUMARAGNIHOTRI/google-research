@@ -242,7 +242,7 @@ def training(x_train, y_train, x_validation,
   metric_name = 'RMSE' if FLAGS.regression else 'AUROC'
   tf.reset_default_graph()
   with tf.Graph().as_default():
-    tf.compat.v1.set_random_seed(FLAGS.tf_seed)
+    tf.set_random_seed(FLAGS.tf_seed)
     # Setup your training.
     graph_tensors_and_ops, metric_scores = _create_computation_graph(
         x_train, y_train, x_validation, y_validation, batch_size)
