@@ -289,9 +289,9 @@ def load_california_housing_data(
 
   new_features = []
   for i in range(len(features)-1):
-      if (i+1)%4!=0:
-          new_features.append('delta_'+'_'.join(features[i].split('_')[:-1])+'_'+str((i+1)%4)+'_'+str(i%4))
-          df[new_features[-1]]=df[features[i+1]]-df[features[i]]
+    for j in range(i+1, (i//4+1)*4):
+        new_features.append('delta_'+'_'.join(features[i].split('_')[:-1])+'_'+str((j)%4)+'_'+str(i%4))
+        df[new_features[-1]]=df[features[j]]-df[features[i]]
 
   features = new_features[:]
   scaler_1 = StandardScaler()
